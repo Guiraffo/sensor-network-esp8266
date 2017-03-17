@@ -6,7 +6,7 @@ TOOLS = ${PWD}/tools
 PACKAGE = esp8266
 ARCH = esp8266
 BOARD = nodemcuv2
-PARAMETER = CpuFrequency=160
+PARAMETER = CpuFrequency=160,FlashSize=4M3M,UploadSpeed=921600
 
 ARG = --board ${PACKAGE}:${ARCH}:${BOARD}:${PARAMETER} --verify --verbose --pref build.path=${BUILD_DIR}
 
