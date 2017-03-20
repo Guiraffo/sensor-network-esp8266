@@ -34,7 +34,7 @@ clean:
 	rm -rf ${BUILD_DIR}
 
 upload: all
-	${TOOLS}/espota.py --debug --progress -i ${IP} -p ${PORT} -f ${BUILD_DIR}/${MAIN_FILE}.bin
+	${TOOLS}/espota.py --debug --progress -i ${IP} -p ${PORT} -f ${BUILD_DIR}/*.bin
 
 run: all upload
 
