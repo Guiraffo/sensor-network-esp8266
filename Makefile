@@ -13,16 +13,11 @@ PARAMETER = CpuFrequency=160,FlashSize=4M3M,UploadSpeed=921600
 ARG = --board ${PACKAGE}:${ARCH}:${BOARD}:${PARAMETER} --verbose-build --pref build.path=${BUILD_DIR}
 
 # Define default serial port
-ifndef SERIAL
-	SERIAL=/dev/ttyUSB0
-endif
+SERIAL ?= /dev/ttyUSB0
 
-ifndef IP
-	IP=192.168.0.106
-endif
-ifndef PORT
-	PORT=5222
-endif
+# Define default OTA  parameters
+IP ?= 192.168.0.106
+PORT ?= 5222
 
 all:
 	arduino --verify ${ARG} ${SRC_DIR}/${MAIN_FILE}
