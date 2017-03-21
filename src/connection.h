@@ -3,6 +3,7 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WiFiMulti.h>
 #include <WiFiClient.h>
+#include "data.h"
 
 class Connection
 {
@@ -12,13 +13,14 @@ public:
 
     ESP8266WiFiClass* wifi();
 
-    void run();
+    bool run();
 
-    static Connection& self();
-
-    ~Connection();
+    void setData(dataStruct* d);
 
     bool getStatus();
+
+    static Connection& self();
+    ~Connection();
 
 private:
     Connection& operator = (Connection& other) = delete;
@@ -26,5 +28,5 @@ private:
     Connection();
 
     ESP8266WiFiMulti* WiFiMulti;
-    bool connected;
+    dataStruct* data;
 };

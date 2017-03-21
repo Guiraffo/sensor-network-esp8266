@@ -2,7 +2,7 @@
 #include "connection.h"
 
 Connection::Connection() :
-    WiFiMulti(new ESP8266WiFiMulti), connected(false)
+    WiFiMulti(new ESP8266WiFiMulti)
 {
 }
 
@@ -18,28 +18,24 @@ ESP8266WiFiClass* Connection::wifi()
 
 bool Connection::getStatus()
 {
-    debug("IP %s", wifi()->localIP().toString().c_str());
     return WiFiMulti->run() == WL_CONNECTED;
 }
 
-void Connection::run()
+bool Connection::run()
 {
-    if (getStatus()) {
-        debug("Connected wifi %s", wifi()->SSID().c_str());
-        debug("macAddress %s",wifi()->macAddress().c_str());
-        debug("Hostname %s",wifi()->hostname().c_str());
-        debug("IP %s", wifi()->localIP().toString().c_str());
-        debug("BSSID %s",wifi()->BSSIDstr().c_str());
-        debug("RSSI %d",wifi()->RSSI());
-        return;
-    }
+    data->networkName = wifi()->SSID().c_str();
+    data->macAddress = wifi()->macAddress().c_str();
+    data->hostName = wifi()->hostname().c_str();
+    data->networkIP = wifi()->localIP().toString().c_str();
+    data->RSSI = wifi()->RSSI();
+    data->BSSID = wifi()->BSSIDstr().c_str();
 
-    if (!connected) {
-        debug("Starting Wifi. (Running..)");
-        connected = true;
-    }
+    return getStatus();
+}
 
-    debug("NOT connected !");
+void Connection::setData(dataStruct* d)
+{
+    data = d;
 }
 
 Connection& Connection::self()
