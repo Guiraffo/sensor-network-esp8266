@@ -27,6 +27,7 @@ void setup()
     Data::self();
     printDataThread.onRun([]() {
         const static unsigned long startTime = micros();
+        Data::self().data->freeHeap = ESP.getFreeHeap();
         Data::self().data->upTime = (micros() - startTime)/1e3;
         Data::self().print();
     });
