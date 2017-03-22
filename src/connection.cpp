@@ -2,13 +2,17 @@
 #include "connection.h"
 
 Connection::Connection() :
-    WiFiMulti(new ESP8266WiFiMulti)
+    WiFiMulti(new ESP8266WiFiMulti), isMaster(false), wifiAdded(false)
 {
 }
 
-void Connection::addWifi(String ssid, String password)
+void Connection::addWifi(String ssid, String password = String())
 {
-    WiFiMulti->addAP(ssid.c_str(), password.c_str());
+    wifiAdded = true;
+    if(password.length() != 0)
+        WiFiMulti->addAP(ssid.c_str(), password.c_str());
+    else
+        WiFiMulti->addAP(ssid.c_str());
 }
 
 ESP8266WiFiClass* Connection::wifi()
@@ -29,13 +33,26 @@ bool Connection::run()
     data->networkIP = wifi()->localIP().toString().c_str();
     data->RSSI = wifi()->RSSI();
     data->BSSID = wifi()->BSSIDstr().c_str();
-
-    return getStatus();
+    if(wifiAdded)
+        return getStatus();
+    return false;
 }
 
 void Connection::setData(dataStruct* d)
 {
     data = d;
+}
+
+bool Connection::scanForNetwork(const char *ssid)
+{
+    int numRedes = wifi()->scanNetworks();
+    debug("Scan Done");
+    for (int i = 0; (i < numRedes) && !isMaster; i++) {
+        if(wifi()->SSID(i) == ssid) {
+            isMaster = true;
+        }
+    }
+    return isMaster;
 }
 
 Connection& Connection::self()

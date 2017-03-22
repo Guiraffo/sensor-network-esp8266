@@ -19,6 +19,8 @@ public:
 
     bool getStatus();
 
+    bool scanForNetwork(const char *ssid);
+
     static Connection& self();
     ~Connection();
 
@@ -29,4 +31,6 @@ private:
 
     ESP8266WiFiMulti* WiFiMulti;
     dataStruct* data;
+    bool isMaster;
+    bool wifiAdded;
 };
