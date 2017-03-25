@@ -36,7 +36,15 @@ void setup()
     //Start connection manager thread
     Connection::self();
     Connection::self().setData(Data::self().data);
-    Connection::self().addWifi("LCA-ROBOTICA", "RedeRoboticaLca2015");
+    if(Connection::self().scanForNetwork("provant")) {
+        debug("provant network found, set Slave Mode");
+        Connection::self().addWifi("provant");
+    } else {
+        debug("provant network not found, set Master Mode");
+        const static char* apname = "provant";
+        Connection::self().wifi()->softAP(apname);
+    }
+
     connectionThread.onRun([]() {
         if(Connection::self().run()) {
             digitalWrite(LED, !digitalRead(LED));
